@@ -2,13 +2,16 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 
 class EnforceSSL(object):
-    """Enforce SSL or non-SSL connection.
-    
-    Note: To be used with my ssl decorator.
+    """Enforce SSL or non-SSL connection with decorator, or automatically redirect based on user.is_authenticated()
+
+    Note: Can be used with my ssl decorator.
     Can be turned off globally by setting `HTTPS_SUPPORT = False` in settings.py.
-    
+
+    If only the middleware is used, the connection is automatically secured if the user
+    is logged in. If not, they are forced to HTTP connection.
+
     Wrap your view in @secure_required or @insecure_required:
-    
+
     @secure_required
     def login(request):
         ...
