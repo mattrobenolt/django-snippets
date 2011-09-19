@@ -9,19 +9,22 @@ except ImportError:
 class TwimlResponse(HttpResponse):
     """ Wrapper around a Twilio Response object
 
-    Provides a shortcut to a response with "say" by just passing
-    a string argument to content, otherwise, accepts a
-    twilio.Response object.
+    Provides a shortcut to a response with "say" or any of the other
+    verbs by just passing a string argument to content,
+    otherwise, accepts a full twilio.Response object.
     """
 
-    def __init__(self, content, status=200):
+    def __init__(self, content, verb="say"):
         if isinstance(content, basestring):
             r = twiml.Response()
-            r.say(content)
+            try:
+                getattr(r, verb.lower())(content)
+            except AttributeError:
+                raise AttributeError("Invalid method, `%s`" % verb)
             content = r
 
         super(TwimlResponse, self).__init__(
             content=content.toxml(),
             content_type='text/xml',
-            status=status
+            status=200
         )
