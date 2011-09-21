@@ -23,4 +23,8 @@ def hello_world2(response):
     r = twiml.Response()
     r.say("Hello world!")
     return TwimlResponse(r)
+
+def hello_world3(response):
+    """Shortcut to responding with an SMS."""
+    return TwimlResponse("Hello world!", verb="sms")
 ```
