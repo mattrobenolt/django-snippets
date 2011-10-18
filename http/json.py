@@ -23,7 +23,7 @@ class JsonResponse(HttpResponse):
             try:
                 callback = callback.strip()
                 if JAVASCRIPT_FUNCTION_PATTERN.match(callback):
-                    if not content_ in JAVASCRIPT_RESERVED_WORDS:
+                    if not callback in JAVASCRIPT_RESERVED_WORDS:
                         content_ = '%s(%s)' % (callback, content_)
             except:
                 # callback probably wasn't a string
