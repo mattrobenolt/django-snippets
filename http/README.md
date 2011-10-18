@@ -6,6 +6,9 @@ from http.json import JsonResponse
 
 def json_response(request):
     return JsonResponse({"key": "value"})
+
+def jsonp_response(request):
+    return JsonResponse({"hey": "value"}, callback=request.GET.get('jsoncallback'))
 ```
 # TwimlResponse
 
