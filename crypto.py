@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
 import hmac
-import pickle
 import base64
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 from django.conf import settings
 from django.utils.hashcompat import sha_constructor, sha_hmac
