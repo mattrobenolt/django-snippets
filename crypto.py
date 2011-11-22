@@ -2,14 +2,13 @@
 
 import hmac
 import base64
+import hashlib
 try:
     import cPickle as pickle
 except ImportError:
     import pickle
 
 from django.conf import settings
-from django.utils.hashcompat import sha_constructor, sha_hmac
-
 
 class HashException(Exception): pass
 class InvalidSignatureException(HashException): pass
@@ -22,8 +21,8 @@ def get_signature(value, secret=None):
         secret = settings.SECRET_KEY # Pull Django's SECRET_KEY as default
     if not isinstance(value, basestring):
         value = '$p$'+base64.b64encode(pickle.dumps(value))
-    key = sha_constructor(secret).digest()
-    signature = hmac.new(key, msg=value, digestmod=sha_hmac).hexdigest()
+    key = hashlib.sha1(secret).hexdigest()
+    signature = hmac.new(key, msg=value, digestmod=hashlib.sha1).hexdigest()
     return signature, value
 
 def unsign_value(hash_, secret=None):
