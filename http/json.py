@@ -27,7 +27,7 @@ JAVASCRIPT_FUNCTION_PATTERN = re.compile(r'^[$a-z_][0-9a-z_\.\[\]]*$', re.I)
 
 class JsonResponse(HttpResponse):
     def __init__(self, content, status=200, callback=None):
-        content_ = json.dumps(content)
+        content_ = json.dumps(content, separators=(',',':'))
         if callback:
             try:
                 callback = callback.strip()
