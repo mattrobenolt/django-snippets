@@ -14,11 +14,11 @@ class TwimlResponse(HttpResponse):
     otherwise, accepts a full twilio.Response object.
     """
 
-    def __init__(self, content, verb="say"):
+    def __init__(self, content, verb="say", kwargs={}):
         if isinstance(content, basestring):
             r = twiml.Response()
             try:
-                getattr(r, verb.lower())(content)
+                getattr(r, verb.lower())(content, **kwargs)
             except AttributeError:
                 raise AttributeError("Invalid method, `%s`" % verb)
             content = r
