@@ -8,9 +8,8 @@ try:
 except ImportError:
     import pickle
 
-from django.conf import settings
-
-class HashException(Exception): pass
+class CryptoException(Exception): pass
+class HashException(CryptoException): pass
 class InvalidSignatureException(HashException): pass
 
 def sign_value(value, secret=None):
@@ -18,7 +17,11 @@ def sign_value(value, secret=None):
 
 def get_signature(value, secret=None):
     if not secret:
-        secret = settings.SECRET_KEY # Pull Django's SECRET_KEY as default
+        try:
+            from django.conf import settings
+            secret = settings.SECRET_KEY # Pull Django's SECRET_KEY as default
+        except ImportError:
+            raise CryptoException('No secret key found')
     if not isinstance(value, basestring):
         value = '$p$'+base64.b64encode(pickle.dumps(value))
     key = hashlib.sha1(secret).hexdigest()
